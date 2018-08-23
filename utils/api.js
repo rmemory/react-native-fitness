@@ -1,6 +1,10 @@
 import { AsyncStorage } from 'react-native'
-import { CALENDAR_STORAGE_KEY } from './_calendar'
-import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import { formatCalendarResults, CALENDAR_STORAGE_KEY } from './_calendar'
+
+export function fetchCalendarResults () {
+  return AsyncStorage.getItem(CALENDAR_STORAGE_KEY)
+    .then(formatCalendarResults)
+}
 
 export function submitEntry ({ entry, key }) {
   return AsyncStorage.mergeItem(CALENDAR_STORAGE_KEY, JSON.stringify({
@@ -11,11 +15,9 @@ export function submitEntry ({ entry, key }) {
 export function removeEntry (key) {
   return AsyncStorage.getItem(CALENDAR_STORAGE_KEY)
     .then((results) => {
-		if (results) {
-			const data = JSON.parse(results)
-			data[key] = undefined
-			delete data[key]
-			AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data))
-		}
+      const data = JSON.parse(results)
+      data[key] = undefined
+      delete data[key]
+      AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data))
     })
 }
